@@ -82,23 +82,25 @@ public class DetailActivityFragment extends Fragment {
     }
 
     private void saveItem() {
-        NotesContentValues values = new NotesContentValues();
+
+        //NotesContentValues es una clase que te crea especializado para esa base de datos
+        NotesContentValues values = new NotesContentValues(); //ContentValues para insertar
         values.putTitle(etTitle.getText().toString());
         values.putDescription(etDescription.getText().toString());
 
-        if (itemId == -1) {
+        if (itemId == -1) {   //Si no tiene nada la id del intent es que creareemos una nueva nota
             insertItem(values);
-        } else {
+        } else {                //Sino es que el intent lleva algo y es para modificar
             updateItem(values);
         }
     }
 
     private void loadItem() {
-        Cursor cursor = getContext().getContentResolver().query(
+        Cursor cursor = getContext().getContentResolver().query(  //Cursor es para sacar informacion
                 NotesColumns.CONTENT_URI,
-                null,
-                NotesColumns._ID + " = ?",
-                new String[]{String.valueOf(itemId)},
+                null,     //SELECT en este caso seria COMO SELECT *
+                NotesColumns._ID + " = ?",  // PARTE DEL WHERE   "Lo del interrogante es por seguridad"
+                new String[]{String.valueOf(itemId)},  //Campo donde sustituira los interrogantes
                 null
         );
 
@@ -106,7 +108,7 @@ public class DetailActivityFragment extends Fragment {
             //Ens situem en el primer valor
             cursor.moveToNext();
 
-            String title = cursor.getString(cursor.getColumnIndex(NotesColumns.TITLE));
+            String title = cursor.getString(cursor.getColumnIndex(NotesColumns.TITLE)); //Para devolver el valor del indice
             etTitle.setText(title);
             String description = cursor.getString(cursor.getColumnIndex(NotesColumns.DESCRIPTION));
             etDescription.setText(description);
